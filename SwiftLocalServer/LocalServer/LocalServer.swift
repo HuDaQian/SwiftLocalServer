@@ -75,7 +75,7 @@ class LocalServer {
     func getResponseFormat(_ code: StatusCode) -> CallbackStatus {
         return responseFormatList[code] ?? CallbackStatus.error(num: ServerStatusCode.config.rawValue, numberKey: nil, value: "Config error", valueKey: nil)
     }
-    func getResponseFormat(_ code: ServerStatusCode) -> CallbackStatus {
+    func getResponseFormat(default code: ServerStatusCode) -> CallbackStatus {
         return responseFormatList[code.rawValue] ?? CallbackStatus.error(num: ServerStatusCode.server.rawValue, numberKey: nil, value: "Server error", valueKey: nil)
     }
     
@@ -104,19 +104,19 @@ class LocalServer {
             connection.confirm {
                 connection.receiveRequest { [self] request in
                     guard let funcName = request.requestUrl?.relativePath else {
-                        closeWithResponse(connection, makeResponse(with: ServerStatusCode.server))
+                        closeWithResponse(connection, makeResponse(default: ServerStatusCode.server))
                         return
                     }
                     // function check
                     guard let serverFunction = getServerFunction(funcName) else {
-                        closeWithResponse(connection, makeResponse(with: ServerStatusCode.method))
+                        closeWithResponse(connection, makeResponse(default: ServerStatusCode.method))
                         return
                     }
                     // method check
                     let configMethod = serverFunction.method.finalValue
                     guard let requestMethod = request.requestMethod,
                           requestMethod != configMethod else {
-                        closeWithResponse(connection, makeResponse(with: ServerStatusCode.method))
+                        closeWithResponse(connection, makeResponse(default: ServerStatusCode.method))
                         return
                     }
                     // header check
@@ -140,7 +140,7 @@ class LocalServer {
                         }
                     }
                     // success
-                    closeWithResponse(connection, makeResponse(with: ServerStatusCode.ok))
+                    closeWithResponse(connection, makeResponse(default: ServerStatusCode.ok))
                 }
             }
         }

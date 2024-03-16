@@ -8,8 +8,8 @@
 import Foundation
 
 extension LocalServer {
-    func makeResponse(with statusCode: ServerStatusCode) -> HTTPMessage {
-        return makeResponse(status: getResponseFormat(ServerStatusCode), responseHeader: getDefaultResponseHeader())
+    func makeResponse(default statusCode: ServerStatusCode) -> HTTPMessage {
+        return makeResponse(status: getResponseFormat(default: statusCode), responseHeader: getDefaultResponseHeader())
     }
     func makeResponse(with statusCode: StatusCode) -> HTTPMessage {
         return makeResponse(status: getResponseFormat(statusCode), responseHeader: getDefaultResponseHeader())
