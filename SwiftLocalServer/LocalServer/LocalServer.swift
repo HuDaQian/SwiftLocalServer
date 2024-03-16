@@ -64,9 +64,7 @@ class LocalServer {
     // be careful if use ! to unwrapper status value
     private var responseFormatList = [StatusCode: CallbackStatus]()
     func addResponseFormat(_ info: [StatusCode: CallbackStatus?]?) {
-        guard let info = info else {
-            return
-        }
+        guard let info = info else { return }
         for (code, status) in info {
             addResponseFormat(code, status: status)
         }
